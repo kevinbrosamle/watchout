@@ -1,60 +1,29 @@
 
-//build vector with dimensions of playboard
+// difficulty level can set amount of asteroids
+var moveTime = 1500;
+var numOfAsteroids = 20;
+var dataSet = [];
 
-//add astroids to page
-  //each will be node with span tag
-  //a few css properties such as the asteroid image
+for (var i = 0; i < numOfAsteroids; i++) {
+  dataSet.push(Math.floor(Math.random() * (10 - 15) + 15));
+}
 
-
-// move astroids around page
-  // every second, move asteroid to random position
-
-// one node span element with different class and different css properties as player object
-  // can be dragged with mouseclick
-
-// increment "high score" as long as you are not hit by asteroid node
-  // if hit, reset current score
-  // if current score > high score. Then high score = current score.
-var width = 960;
-var height = 500;
-var dataset = ([1, 5, 10, 20, 40, 10, 15, 20, 10]);
+// create asteroids
 var svg = d3.select('svg');
-svg.style('border', '2px solid black');
-svg.style('background-color', 'gray');
+var circle = svg.selectAll('circle').data(dataSet);
+var circleEnter = circle.enter().append('circle');
+circleEnter.attr('fill', 'blue');
+circleEnter.attr('r', function(d) { return d; });
+circleEnter.attr('cx', function() { return Math.random() * 600; });
+circleEnter.attr('cy', function() { return Math.random() * 600; });
 
-var addAsteroids = function() {
-  svg.selectAll('circle')
-    .data(dataset)
-    .enter()
-    .append('circle')
-    .attr('cx', (Math.random() * width))
-    .attr('cy', 50)
-    .attr('r', function(d) {
-      return d + 'px';
-    });
-};
-  
-addAsteroids();
 
-var alterAsteroids = function() {
-  var circle = d3.selectAll('circle');
-  circle.style('fill', 'steelblue');
-  circle.transition().attr('cx', function() {
-    return (Math.random() * 360);
-  });
-  circle.attr('cy', function() {
-    return (Math.random() * 360);
-  });
-  circle.attr('r', function(d) {
-    return Math.sqrt(d) * 10;
-  });
-  
+// transition asteroids to new x, y
+var randomizeAsteroids = function() {
+  circle.transition().duration(1000)
+      .attr('cx', function() { return Math.random() * 600; })
+      .attr('cy', function() { return Math.random() * 600; });
 };
 
-alterAsteroids();
-
-var runner = setInterval(function() {
-  alterAsteroids();
-}, 1000);
-
-addAsteroids();
+// move asteroids every 1.5 seconds
+setInterval(function() { randomizeAsteroids(); }, moveTime);
