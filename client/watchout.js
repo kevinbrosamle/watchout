@@ -17,45 +17,44 @@
   // if current score > high score. Then high score = current score.
 var width = 960;
 var height = 500;
-var dataset = [1];
+var dataset = ([1, 5, 10, 20, 40, 10, 15, 20, 10]);
 var svg = d3.select('svg');
-svg.style('border', "2px solid black");
-svg.style('background-color', "gray");
+svg.style('border', '2px solid black');
+svg.style('background-color', 'gray');
 
-var addAsteroid = function() {
-  svg.select('circle')
+var addAsteroids = function() {
+  svg.selectAll('circle')
     .data(dataset)
     .enter()
     .append('circle')
     .attr('cx', (Math.random() * width))
-    // .attr('cx', (Math.random() * width))
-    .attr('cy', (Math.random() * height))
-    .attr('r', 10);
+    .attr('cy', 50)
+    .attr('r', function(d) {
+      return d + 'px';
+    });
 };
   
-
-// var alterAsteroids = function() {
-//   d3.selectAll('.asteroid')
-// }
-
-var addAsteroids = function() {
-  for (var i = 0; i < 20; i++) {
-    addAsteroid();
-  }
-};
-
 addAsteroids();
 
-// var svg = d3.select("svg"),
-//   width = +svg.attr("width"),
-//   height = +svg.attr("height"),
-//   g = svg.append("g").attr("transform", "translate(32," + (height / 2) + ")");
+var alterAsteroids = function() {
+  var circle = d3.selectAll('circle');
+  circle.style('fill', 'steelblue');
+  circle.transition().attr('cx', function() {
+    return (Math.random() * 360);
+  });
+  circle.attr('cy', function() {
+    return (Math.random() * 360);
+  });
+  circle.attr('r', function(d) {
+    return Math.sqrt(d) * 10;
+  });
+  
+};
 
-// var board = 
-// d3.select("svg").
+alterAsteroids();
 
+var runner = setInterval(function() {
+  alterAsteroids();
+}, 1000);
 
-// d3.select("svg").selectAll("span")
-//   .data()
-//   .enter()
-//   .append()
+addAsteroids();
